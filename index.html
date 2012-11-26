@@ -2,16 +2,16 @@
 <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
 <html xmlns='http://www.w3.org/1999/xhtml' lang='en' xml:lang='en'>
 <head>
-<title>SPEADKAT</title>
+<title>speadKAT</title>
 <link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
 <style type='text/css'>
 body {
    background-color: grey;
+    color:white;
 }
 .ascii {
    font-family: Courier;
    /*font-family:Audiowide;*/
-   color: white;
    font-size:8pt;
    font-weight: bold;
    position:absolute;
@@ -23,17 +23,35 @@ body {
   top:2.4em;
   left:3.35em;
   font-size:5em;
-  color:white;
   font-family:Audiowide;
 }
 .shadow {
   text-shadow: 5px 5px 6px #000000;
   filter: dropshadow(color=#000000, offx=5, offy=5);
 }
+.normtext{
+  position:absolute;
+  top:22em;
+  left:5em;
+  right: 5em;
+  /*border: 1px solid white;*/
+ /* padding:1.2em;*/
+  font-size:1em;
+  word-wrap:break-word;
+  /*width:10em;*/
+   font-family: Courier;
+}
+li {
+  padding:0.5em;
+}
 </style>
 </head>
 <body>
 <div class="speadkat shadow">speadKAT</div>
+<div class="normtext">
+<li>A c API for the spead protocol</li>
+<li>Some example applications</li>
+</div>
 <div class='ascii shadow'><pre>
                                                                                 
                                                                                 
