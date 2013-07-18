@@ -334,7 +334,7 @@ int setup_ocl(char *kf, cl_context *context, cl_command_queue *command_queue, cl
     return -1;
   }
 
-  int devid = 0;
+  int devid = 1;
 
   *command_queue = clCreateCommandQueue(*context, devices[devid], CL_QUEUE_PROFILING_ENABLE, &err);
   if (err != CL_SUCCESS){
