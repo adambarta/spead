@@ -330,6 +330,22 @@ struct spead_client *accept_spead_socket(struct spead_socket *x)
   return c;
 }
 
+char *get_client_address(struct spead_client *c)
+{
+  if (c == NULL)
+    return NULL;
+
+  return inet_ntoa(c->c_addr.sin_addr);
+}
+
+unsigned short get_client_port(struct spead_client *c)
+{
+  if (c == NULL)
+    return -1;
+
+  return ntohs(c->c_addr.sin_port);
+}
+
 void destroy_spead_client(void *data)
 {
   struct spead_client *c;

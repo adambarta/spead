@@ -306,6 +306,9 @@ struct spead_client *accept_spead_socket(struct spead_socket *x);
 void destroy_spead_client(void *data);
 int compare_spead_clients(const void *v1, const void *v2);
 
+char *get_client_address(struct spead_client *c);
+unsigned short get_client_port(struct spead_client *c);
+
 /*spead workers subprocess api*/
 void destroy_child_sp(void *data);
 struct u_child *fork_child_sp(struct spead_pipeline *l, void *data, int (*call)(void *data, struct spead_pipeline *l, int cfd));
