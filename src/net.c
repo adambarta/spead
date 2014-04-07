@@ -278,9 +278,27 @@ int bind_spead_socket(struct spead_socket *x)
 }
 
 int listen_spead_socket(struct spead_socket *x)
-{
+{ 
+  int sendbuf;
+  socklen_t size;
+
   if (x == NULL || x->x_active == NULL)
     return -1;
+  
+  sendbuf = BIG_BUF;
+  if (setsockopt(x->x_fd, SOL_SOCKET, SO_SNDBUF, &sendbuf, sizeof(sendbuf)) < 0){
+#ifdef DEBUG
+    fprintf(stderr,"%s: error cannot increase send buf setsockopt: %s\n", __func__, strerror(errno));
+#endif
+  }
+  
+  sendbuf = 0;
+  size = sizeof(socklen_t);
+  
+#ifdef DEBUG
+  getsockopt(x->x_fd, SOL_SOCKET, SO_SNDBUF, &sendbuf, &size);
+  fprintf(stderr, "%s: SNDBUF is %d\n", __func__, sendbuf);
+#endif
 
   if (listen(x->x_fd, XSOCK_LISTEN_BACKLOG) < 0){
 #ifdef DEBUG
