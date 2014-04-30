@@ -122,7 +122,7 @@ int main()
     return EX_SOFTWARE;
 
   point* s_y = malloc(sizeof(point) * NP);
-  if (s_y)
+  if (s_y == NULL)
     return EX_SOFTWARE;
 
   for(i = 0; i < NP; i++) {
