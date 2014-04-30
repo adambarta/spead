@@ -4,12 +4,12 @@ CFLAGS += -Wall
 CFLAGS += -ggdb
 CFLAGS += -O3
 
-LIB= -lspead
+LIB= -lspead -lm
 LDIR= -L../src
 IDIR= -I../src
 
 
-UTILS = udp_io.c send.c raw_spead.c pipespead.c murmur.c poximity_search.c
+UTILS = udp_io.c send.c raw_spead.c pipespead.c murmur.c proximity_search.c
 EXE = $(patsubst %.c,%.elf,$(UTILS))
 
 OBJ = $(patsubst %.c,%.o,$(UTILS))
