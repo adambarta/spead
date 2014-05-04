@@ -67,7 +67,7 @@ int main(int argc, char * argv[])
  
   hash = imurmur3_32(key, strlen(key), 5);
 
-  fprintf(stdout, "%u", hash);
+  fprintf(stdout, "%u\n", hash);
 
   return 0;
 }
