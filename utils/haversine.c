@@ -28,7 +28,7 @@ int arc_in_rad(const struct pos *from, const struct pos *to, double *dist)
   lng_h = sin(lng_arc * 0.5f);
   lng_h = lng_h;
 
-  *dist = 2.0f * asin(sqrt(lat_h + cos(from->lat * DEG_TO_RAD) * cos(to->lat * DEG_TO_RAD) * lng_h));
+  *dist = 2.0f * asin(sqrt(lat_h + cos(from->lat * DEG_TO_RAD) * cos(to->lat * DEG_TO_RAD) * lng_h))*EARTH_RADIUS_M;
 
   return 0;
 }
@@ -54,10 +54,10 @@ int main(int argc, char * argv[])
 
   
   from->lat = 51.52297369999999;
-  from->lng = -22.1400877999999465;
+  from->lng = -0.1400877999999465;
 
-  to->lat = 0.0;
-  to->lng = 0.0;
+  to->lat = 51.22297369999999;
+  to->lng = -0.1400877999999465;
 
   if (arc_in_rad(from, to, &dist) < 0){
     goto freeme;
