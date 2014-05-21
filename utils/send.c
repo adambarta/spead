@@ -9,6 +9,8 @@
 #include <sys/socket.h>
 #include <netinet/ip.h>
 #include <netinet/udp.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
  
 #define SIZE 1130
@@ -55,7 +57,6 @@ int main(int argc, char *argv[])
 {
   int reuse_addr, off, fd, i;
   
-  
   struct sockaddr_in dst;
 
   struct iphdr *ip;
@@ -81,14 +82,15 @@ int main(int argc, char *argv[])
   ip->version = 4;
   ip->tos     = 16;
   ip->tot_len = SIZE;
-  ip->id      = htons(54321);
+  //ip->id      = htons(54321);
   ip->ttl     = 64;
   ip->protocol= 17;
   ip->saddr   = inet_addr("55.55.55.55");
+  //ip->saddr   = inet_addr("192.168.1.24");
   ip->daddr   = dst.sin_addr.s_addr;
 
 
-  udp->source = 0;//dst.sin_port;
+  udp->source = htons(5555);//dst.sin_port;
   //udp->dest   = dst.sin_port;
   udp->len    = htons(SIZE - (off + sizeof(struct udphdr)));
   udp->check  = 0;
@@ -135,6 +137,7 @@ int main(int argc, char *argv[])
       i++;
 
     if(sendto(fd, buf, SIZE, MSG_CONFIRM, (struct sockaddr *)&dst, sizeof(dst)) < 0){
+    //if(sendto(fd, buf, SIZE, 0, (struct sockaddr *)&dst, sizeof(dst)) < 0){
       fprintf(stderr, "error sendto <%s>\n", strerror(errno));
       exit(-1);
     } else {
