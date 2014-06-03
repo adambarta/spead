@@ -87,7 +87,7 @@ int run_receiver(struct spead_socket *x)
   struct spead_client *c;
   int wb, rtn;
   unsigned char buf[BUFZ];
-
+new_client:
   c = accept_spead_socket(x);
   if (c == NULL){
 #ifdef DEBUG
@@ -99,6 +99,11 @@ int run_receiver(struct spead_socket *x)
   while(run){
 
     if ((rtn = recv_data_spead_client(c, buf, BUFZ)) <= 0){
+      if (rtn == 0){
+        destroy_spead_client(c);
+        c = NULL;
+        goto new_client;
+      }
       run = 0;
       break;
     }

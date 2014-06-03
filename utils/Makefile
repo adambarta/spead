@@ -5,6 +5,7 @@ CFLAGS += -ggdb
 CFLAGS += -O3
 
 LIB= -lspead -lm
+SLIB = ../src/libspead.a
 LDIR= -L../src
 IDIR= -I../src
 
@@ -20,12 +21,15 @@ all: $(EXE)
 %.o: %.c
 	$(CC) $(CFLAGS) $(IDIR) -c $^ -o $@
 
+tcp-static: tcp_io.o 
+	$(CC) $< -o $@ $(SLIB)
+
 %.elf: %.o 
 	$(CC) $< -o $@ $(LDIR) $(LIB)
 	mv $@ $(patsubst %.elf,%,$@)  
 
 clean:
-	$(RM) $(OBJ) $(EXE) $(EXE2) core vgcore*
+	$(RM) $(OBJ) $(EXE) $(EXE2) core vgcore* tcp-static
 
 install: all
 	install $(EXE) /usr/local/bin
