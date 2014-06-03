@@ -585,23 +585,17 @@ def DEBUG
   return 0;
 }
 
-int send_raw_data_spead_socket(void *obj, void *data, uint64_t len)
+int send_data_spead_socket(struct spead_socket *x, void *data, uint64_t len)
 {
-  int sb, sfd;
   struct addrinfo     *dst;
-  struct spead_tx     *tx;
-  struct spead_socket *x;
+  int sb, sfd;
 
-  tx = obj;
-
-  if (tx == NULL || tx->t_x == NULL || data == NULL || len <= 0){
+  if (x == NULL || data == NULL || len <= 0){
 #ifdef DEBUG
     fprintf(stderr, "%s: param error\n", __func__);
 #endif
     return -1;
   }
-
-  x = tx->t_x;
 
   sfd = get_fd_spead_socket(x);
   dst = get_addr_spead_socket(x);
@@ -619,6 +613,87 @@ int send_raw_data_spead_socket(void *obj, void *data, uint64_t len)
     return -1;
   }
 
+  return sb;
+}
+
+int send_raw_data_spead_socket(void *obj, void *data, uint64_t len)
+{
+  struct spead_tx     *tx;
+  struct spead_socket *x;
+  int rtn;
+
+  tx = obj;
+
+  if (tx == NULL || tx->t_x == NULL || data == NULL || len <= 0){
+#ifdef DEBUG
+    fprintf(stderr, "%s: param error\n", __func__);
+#endif
+    return -1;
+  }
+
+  x = tx->t_x;
+  
+  if ((rtn = send_data_spead_socket(x, data, len)) < 0){
+    return rtn;
+  }
+
+  lock_mutex(&(tx->t_m));
+  tx->t_pc++;
+  unlock_mutex(&(tx->t_m));
+
+  return 0;
+}
+
+int recv_data_spead_socket(struct spead_socket *x, void *data, uint64_t len)
+{
+  int rb, sfd;
+
+  if (x == NULL || data == NULL || len <= 0){
+#ifdef DEBUG
+    fprintf(stderr, "%s: param error\n", __func__);
+#endif
+    return -1;
+  }
+
+  sfd = get_fd_spead_socket(x);
+
+  if (sfd <=0){
+    return -1;
+  }
+
+  rb = recvfrom(sfd, data, len, 0, NULL, NULL);
+  if (rb < 0){
+#ifdef DEBUG
+    fprintf(stderr, "%s: packet (%p) size [%ld] sb [%d] bytes\n", __func__, data, len, rb);
+#endif
+    fprintf(stderr, "%s: sendto err (\033[31m%s\033[0m)\n", __func__, strerror(errno));
+    return -1;
+  }
+
+  return rb;
+}
+
+int recv_raw_data_spead_socket(void *obj, void *data, uint64_t len)
+{
+  struct spead_tx     *tx;
+  struct spead_socket *x;
+  int rtn;
+
+  tx = obj;
+
+  if (tx == NULL || tx->t_x == NULL || data == NULL || len <= 0){
+#ifdef DEBUG
+    fprintf(stderr, "%s: param error\n", __func__);
+#endif
+    return -1;
+  }
+
+  x = tx->t_x;
+
+  if ((rtn = recv_data_spead_socket(x, data, len)) < 0){
+    return rtn;
+  }
+  
   lock_mutex(&(tx->t_m));
   tx->t_pc++;
   unlock_mutex(&(tx->t_m));

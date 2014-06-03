@@ -9,7 +9,7 @@ LDIR= -L../src
 IDIR= -I../src
 
 
-UTILS = udp_io.c send.c raw_spead.c pipespead.c murmur.c proximity_search.c haversine.c coopers_multiple_dwelling_problem.c cloneeg.c 
+UTILS = udp_io.c tcp_io.c send.c raw_spead.c pipespead.c murmur.c proximity_search.c haversine.c coopers_multiple_dwelling_problem.c cloneeg.c 
 EXE = $(patsubst %.c,%.elf,$(UTILS))
 EXE2 = $(patsubst %.c,%,$(UTILS))
 

@@ -299,7 +299,10 @@ int unset_multicast_receive_opts_spead_socket(struct spead_socket *x);
 int get_fd_spead_socket(struct spead_socket *x);
 struct addrinfo *get_addr_spead_socket(struct spead_socket *x);
 int send_packet_spead_socket(void *data, struct spead_packet *p); // data should be a spead_tx data structure
+int send_data_spead_socket(struct spead_socket *x, void *data, uint64_t len);
 int send_raw_data_spead_socket(void *obj, void *data, uint64_t len); //obj should be a spead_tx
+int recv_raw_data_spead_socket(void *obj, void *data, uint64_t len); //obj could be a spead_tx but future an rx
+int recv_data_spead_socket(struct spead_socket *x, void *data, uint64_t len);
 int send_spead_stream_terminator(struct spead_tx *tx);
 int listen_spead_socket(struct spead_socket *x);
 struct spead_client *accept_spead_socket(struct spead_socket *x);
