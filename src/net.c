@@ -523,6 +523,14 @@ int get_fd_spead_socket(struct spead_socket *x)
   return x->x_fd;
 }
 
+int get_fd_spead_client(struct spead_client *c)
+{
+  if (c == NULL)
+    return -1;
+
+  return c->c_fd;
+}
+
 struct addrinfo *get_addr_spead_socket(struct spead_socket *x)
 {
   if (x == NULL)
@@ -644,18 +652,18 @@ int send_raw_data_spead_socket(void *obj, void *data, uint64_t len)
   return 0;
 }
 
-int recv_data_spead_socket(struct spead_socket *x, void *data, uint64_t len)
+int recv_data_spead_client(struct spead_client *c, void *data, uint64_t len)
 {
   int rb, sfd;
 
-  if (x == NULL || data == NULL || len <= 0){
+  if (c == NULL || data == NULL || len <= 0){
 #ifdef DEBUG
     fprintf(stderr, "%s: param error\n", __func__);
 #endif
     return -1;
   }
 
-  sfd = get_fd_spead_socket(x);
+  sfd = get_fd_spead_client(c);
 
   if (sfd <=0){
     return -1;
@@ -672,7 +680,7 @@ int recv_data_spead_socket(struct spead_socket *x, void *data, uint64_t len)
 
   return rb;
 }
-
+#if 0
 int recv_raw_data_spead_socket(void *obj, void *data, uint64_t len)
 {
   struct spead_tx     *tx;
@@ -700,3 +708,4 @@ int recv_raw_data_spead_socket(void *obj, void *data, uint64_t len)
 
   return 0;
 }
+#endif

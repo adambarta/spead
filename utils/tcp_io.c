@@ -96,16 +96,9 @@ int run_receiver(struct spead_socket *x)
     return -1;
   }
 
-  if (connect_spead_socket(x) < 0){
-#ifdef DEBUG
-    fprintf(stderr, "%s: cant connect\n", __func__);
-#endif
-    goto end_recv;
-  }
-
   while(run){
 
-    if ((rtn = recv_data_spead_socket(x, buf, BUFZ)) <= 0){
+    if ((rtn = recv_data_spead_client(c, buf, BUFZ)) <= 0){
       run = 0;
       break;
     }
@@ -118,7 +111,6 @@ int run_receiver(struct spead_socket *x)
  
   }
   
-end_recv:
 #ifdef DEBUG
   fprintf(stderr, "%s: rtn [%d] wb [%d]\n", __func__, rtn, wb);
 #endif
