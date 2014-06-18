@@ -11,6 +11,8 @@
 #include <math.h>
 
 #include <sys/mman.h>
+
+#include <sys/time.h>
     
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -236,8 +238,8 @@ int run_raw_receiver(struct spead_socket *x)
 
 int main(int argc, char *argv[])
 {
-  int i=1,j=1,k=0;
-  char c, flag = 0, *host = NULL;
+  int i=1,j=1,k=0, flag = 0;
+  char c, *host = NULL;
 
   struct spead_socket *x=NULL;
 
@@ -266,6 +268,11 @@ int main(int argc, char *argv[])
         case 's':
           j++;
           flag = 0;
+          break;
+
+         case 'n':
+          j++;
+          flag = 2;
           break;
 
         case 'h':
@@ -304,9 +311,13 @@ int main(int argc, char *argv[])
 
   x = create_raw_ip_spead_socket(host);
   if (x == NULL){
+#ifdef DEBUG
+    fprintf(stderr, "%s\n", strerror(errno));
+#endif
     return EX_SOFTWARE;
   }
 
+  struct timeval tv;
   switch (flag){
     
     case 0: /*sender*/
@@ -337,6 +348,32 @@ int main(int argc, char *argv[])
       if (run_raw_receiver(x) < 0){
 #ifdef DEBUG
         fprintf(stderr, "%s: run receiver fail\n", __func__);
+#endif
+      }
+
+      break;
+
+    case 2:
+
+
+      if (gettimeofday(&tv, NULL) < 0){
+#ifdef DEBUG
+        fprintf(stderr, "%s: gettimeofday() fail\n", __func__);
+#endif
+        return 1;
+      }
+
+#ifdef DEBUG
+      fprintf(stderr, "%s: sending nothing @ %lu.%ld\n", __func__, tv.tv_sec, tv.tv_usec);
+#endif
+
+      if (connect_spead_socket(x) < 0){
+        goto cleanup;
+      }
+
+      if (send(x->x_fd, NULL, 0, MSG_CONFIRM) < 0){
+#ifdef DEBUG
+        fprintf(stderr, "%s: send error (%s)\n", __func__, strerror(errno));
 #endif
       }
 
