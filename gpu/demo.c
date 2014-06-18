@@ -8,6 +8,7 @@
 #include <errno.h>
 #include <string.h>
 #include <fcntl.h>
+#include <signal.h>
 
 #include <sys/stat.h>
 #include <sys/mman.h>
@@ -21,6 +22,35 @@ struct demo_o {
   uint64_t                chunk;
 };
 
+volatile int run = 1;
+
+void handle_us(int sn)
+{
+  run = 0;
+#ifdef DEBUG
+  fprintf(stderr, "%s: in <%s> sig # [%d]\n", __func__, __FILE__, sn);
+#endif
+}
+
+int register_signals_us()
+{
+  struct sigaction sa;
+
+  sigfillset(&sa.sa_mask);
+  sa.sa_handler   = handle_us;
+  sa.sa_flags     = 0;
+
+  if (sigaction(SIGINT, &sa, NULL) < 0)
+    return -1;
+
+  if (sigaction(SIGTERM, &sa, NULL) < 0)
+    return -1;
+
+  if (sigaction(SIGPIPE, &sa, NULL) < 0)
+    return -1;
+
+  return 0;
+}
 
 void destroy_demo(struct demo_o *d)
 {
@@ -159,6 +189,11 @@ int run_pipeline(struct demo_o *d, uint64_t chunk)
   have  = size;
 
 #if 0
+def DEBUG
+  fprintf(stderr, "%s: size is [%d] \n", __func__, size);
+#endif
+
+#if 0
   src = get_data_file_ptr_at_off(d->f, off);
   if (src == NULL)
     return -1;
@@ -212,7 +247,7 @@ int run_pipeline(struct demo_o *d, uint64_t chunk)
   
     //fprintf(stderr, "[%ld] at [%ld] of [%ld] left [%ld]\n", count++, off, size, have);
 
-  } while ( (size > 0) ? off < size : 1 );
+  } while ( ((size > 0) ? off < size : 1) && run );
 
 
   destroy_item_group(ig);
@@ -271,6 +306,10 @@ int main(int argc, char *argv[])
   }
 
   destroy_demo(d);
+
+#ifdef DEBUG
+  fprintf(stderr, "%s: DONE\n", __FILE__);
+#endif
     
   return 0;
 }

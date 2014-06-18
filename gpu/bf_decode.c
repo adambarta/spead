@@ -144,7 +144,8 @@ void transpose_bf_block(void *input,void *output, uint64_t data_len, uint64_t st
  in = input;
  out = output;
 
-#ifdef DEBUG
+#if 0 
+def DEBUG
  fprintf(stderr,"Tranpose: %i cols, %i rows, %i data_len\n",cols,rows,data_len);
 #endif
  blocksize = 8;
