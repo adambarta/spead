@@ -92,7 +92,7 @@ struct spead_tx *create_speadtx(char *host, char *port, char bcast, char *mcast,
 
   if (mcast){
 
-    tx->t_x = create_spead_socket(mcast, port);
+    tx->t_x = create_udp_spead_socket(mcast, port);
     if (tx->t_x == NULL){
       destroy_speadtx(tx);
       return NULL;
@@ -105,7 +105,7 @@ struct spead_tx *create_speadtx(char *host, char *port, char bcast, char *mcast,
     
   } else {
 
-    tx->t_x = create_spead_socket(host, port);
+    tx->t_x = create_udp_spead_socket(host, port);
     if (tx->t_x == NULL){
       destroy_speadtx(tx);
       return NULL;

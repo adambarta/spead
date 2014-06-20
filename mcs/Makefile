@@ -12,6 +12,7 @@ IDIR= -I../src
 
 HDR = mcs.h
 UTILS = mcs.c packet.c
+EXEst = mcs-static
 EXE = mcs
 
 
@@ -25,13 +26,16 @@ CFLAGS += -DVERSION=\"$(GITVER)\"
 
 OBJ = $(patsubst %.c,%.o,$(UTILS))
 
-all: $(EXE)
+all: $(EXE) $(EXEst)
 
 %.o: %.c $(HDR)
 	$(CC) $(CFLAGS) $(IDIR) -c $< -o $@
 
 $(EXE): $(OBJ)
 	$(CC) $^ -o $@ $(LDIR) $(LIB)
+
+$(EXEst): $(OBJ)
+	$(CC) $^ -o $@ $(LDIR) $(LIB) -s -static -ldl
 
 clean:
 	$(RM) $(OBJ) $(EXE) core vgcore*

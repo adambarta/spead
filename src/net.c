@@ -36,7 +36,7 @@ void destroy_spead_socket(struct spead_socket *x)
   }
 } 
 
-struct spead_socket *create_spead_socket(char *host, char *port)
+struct spead_socket *create_udp_spead_socket(char *host, char *port)
 {
   struct spead_socket *x;
 

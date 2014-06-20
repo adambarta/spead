@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
   if (register_signals_us() < 0)
     return EX_SOFTWARE;
 
-  x = create_spead_socket(host, port);
+  x = create_udp_spead_socket(host, port);
   if (x == NULL){
     return EX_SOFTWARE;
   }
