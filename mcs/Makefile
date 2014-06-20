@@ -3,6 +3,7 @@ CFLAGS += -DDATA
 CFLAGS += -Wall
 CFLAGS += -ggdb
 CFLAGS += -O3
+CFLAGS += -DIKATCP
 CC = gcc
 
 LIB= -lspead
