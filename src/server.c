@@ -162,7 +162,7 @@ int startup_server_us(struct u_server *s, char *port, int broadcast, char *multi
   if (s == NULL || port == NULL)
     return -1;
   
-  s->s_x = create_spead_socket(NULL, port);
+  s->s_x = create_udp_spead_socket(NULL, port);
   if (s->s_x == NULL){
 #ifdef DEBUG
     fprintf(stderr, "%s: cannot create spead socket\n", __func__);

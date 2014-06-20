@@ -287,7 +287,7 @@ char *itoa(int64_t i, char b[]);
 
 /*spead socket api*/
 void destroy_spead_socket(struct spead_socket *x);
-struct spead_socket *create_spead_socket(char *host, char *port);
+struct spead_socket *create_udp_spead_socket(char *host, char *port);
 struct spead_socket *create_raw_ip_spead_socket(char *host);
 struct spead_socket *create_tcp_socket(char *host, char *port);
 int bind_spead_socket(struct spead_socket *x);
@@ -299,10 +299,14 @@ int unset_multicast_receive_opts_spead_socket(struct spead_socket *x);
 int get_fd_spead_socket(struct spead_socket *x);
 struct addrinfo *get_addr_spead_socket(struct spead_socket *x);
 int send_packet_spead_socket(void *data, struct spead_packet *p); // data should be a spead_tx data structure
+int send_data_spead_socket(struct spead_socket *x, void *data, uint64_t len);
 int send_raw_data_spead_socket(void *obj, void *data, uint64_t len); //obj should be a spead_tx
+//int recv_raw_data_spead_socket(void *obj, void *data, uint64_t len); //obj could be a spead_tx but future an rx
+int recv_data_spead_client(struct spead_client *c, void *data, uint64_t len);
 int send_spead_stream_terminator(struct spead_tx *tx);
 int listen_spead_socket(struct spead_socket *x);
 struct spead_client *accept_spead_socket(struct spead_socket *x);
+int get_fd_spead_client(struct spead_client *c);
 void destroy_spead_client(void *data);
 int compare_spead_clients(const void *v1, const void *v2);
 

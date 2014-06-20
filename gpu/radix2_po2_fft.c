@@ -867,7 +867,7 @@ int spead_api_callback(struct spead_api_module_shared *s, struct spead_item_grou
     return -1;
   }
 
-#ifdef DEBUG
+#if 1 
   int i;
   fprintf(stdout, "set term x11 size 1200,720\nset style data line\nset style line 1 lt 1 lw 0.1 pt 0 lc rgb \"green\"\nplot \"-\" using 0:1 ls 1 title \"fft power\"\n");
   float2 *out = so->o_host;
@@ -875,6 +875,7 @@ int spead_api_callback(struct spead_api_module_shared *s, struct spead_item_grou
     fprintf(stdout, "%f\n", out[i].x);
   }
   fprintf(stdout, "e\n\n");
+  fflush(stdout);
 #endif
 
 #if 0 

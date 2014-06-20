@@ -1,6 +1,6 @@
 CFLAGS += -DIKATCP
 CFLAGS += -DDEBUG
-#CFLAGS += -O3
+CFLAGS += -g #-O3
 
 CC = gcc -ggdb -Wall
 
@@ -38,9 +38,9 @@ CFLAGS += -DVERSION=\"$(GITVER)\"
 
 #OBJ = $(patsubst %.cu,%.so,$(UTILS))
 EXE= demo wave_gen device
-MODS=         dummy.so ocl.so dumpdata.so writefile.so snapshot.so csv.so basic_ocl.so pipeline_0.so pipeline_1.so radix2_po2_fft.so power.so data_transfer.so
+MODS= bf_decode.so dummy.so ocl.so dumpdata.so writefile.so snapshot.so csv.so basic_ocl.so pipeline_0.so pipeline_1.so radix2_po2_fft.so power.so data_transfer.so
 #MODS+= fft.so
-SRC= shared.c dummy.c  ocl.c  dumpdata.c  writefile.c snapshot.c csv.c basic_ocl.c pipeline_0.c pipeline_1.c radix2_po2_fft.c power.c data_transfer.c
+SRC= shared.c bf_decode.c dummy.c  ocl.c  dumpdata.c  writefile.c snapshot.c csv.c basic_ocl.c pipeline_0.c pipeline_1.c radix2_po2_fft.c power.c data_transfer.c
 
 HDR= shared.h
 OBJ= $(patsubst %.c,%.o,$(SRC))

@@ -4,7 +4,7 @@ INSTALL=install
 
 #CFLAGS += -DPROCESS
 #CFLAGS += -DPROCESSDESC
-CFLAGS += -DDEBUG
+#CFLAGS += -DDEBUG
 #CFLAGS += -DDEBUG=3
 CFLAGS += -DIKATCP
 #CFLAGS += -DDISCARD
@@ -53,7 +53,8 @@ TXOBJ  = $(patsubst %.c,%.o,$(TXSRC))
 RXOBJ  = $(patsubst %.c,%.o,$(RXSRC))
 
 
-all: $(RXEXE) $(TXEXE)
+all: dynamic static
+dynamic: $(RXEXE) $(TXEXE)
 static: $(RXEXE)-static $(TXEXE)-static
 
 $(DLIB): $(SOBJ)
@@ -66,16 +67,16 @@ $(SLIB): $(SOBJ)
 	$(CC) $(CFLAGS) -c $< -o $@ $(INC) -fPIC
 
 $(RXEXE): $(RXOBJ) $(DLIB)
-	$(CC) -o $@ $< $(LIB)
+	$(CC) -o $@ $< $(LIB) -s
 
 $(TXEXE): $(TXOBJ) $(DLIB)
-	$(CC) -o $@ $< $(LIB)
+	$(CC) -o $@ $< $(LIB) -s
 
 $(RXEXE)-static: $(RXOBJ) $(SLIB)
-	$(CC) -o $@ $^ -ldl -lm
+	$(CC) -o $@ $^ -ldl -lm -static -s
 
 $(TXEXE)-static: $(TXOBJ) $(SLIB)
-	$(CC) -o $@ $^ -ldl -lm
+	$(CC) -o $@ $^ -ldl -lm -static -s
 
 %.o: %.c $(HDR)
 	$(CC) $(CFLAGS) -c $< -o $@ $(INC)

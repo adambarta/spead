@@ -5,6 +5,7 @@
 #define KERNELS_FILE  "/kernels.cl"
 #define KERNELDIR     "./"
 #define LEN 1024*1024
+//#define LEN 1024
 
 int main(int argc, char *argv[])
 {
@@ -84,16 +85,17 @@ int main(int argc, char *argv[])
   }
 #endif
 
-  for (i=1024; i<len; i+=1024){
+  //for (i=1024; i<len; i+=1024){
     
-    if (xfer_from_ocl_mem(o_ds, o_in, sizeof(cl_int4) * i, o_out) < 0){
+    //if (xfer_from_ocl_mem(o_ds, o_in, sizeof(cl_int4) * i, o_out) < 0){
+    if (xfer_from_ocl_mem(o_ds, o_in, sizeof(cl_int4) * len, o_out) < 0){
 #ifdef DEBUG
       fprintf(stderr, "%s: xfer from ocl error\n", __func__);
 #endif
       goto clean_up;
     }
 
-  }
+ // }
   
 
 #if 0

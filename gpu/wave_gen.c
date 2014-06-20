@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <math.h>
+#include <time.h>
 
 #include <spead_api.h>
 
@@ -11,7 +12,7 @@
 #define BUF_SIZE   (S_RATE * 2)
 #define FREQ_HZ    300
 
-static int run = 1;
+volatile int run = 1;
 
 void handle_us(int signum) 
 {
@@ -32,6 +33,9 @@ int register_signals_us()
   if (sigaction(SIGTERM, &sa, NULL) < 0)
     return -1;
 
+  if (sigaction(SIGPIPE, &sa, NULL) < 0)
+    return -1;
+
   return 0;
 }
 
@@ -47,6 +51,8 @@ int main(int argc, char *argv[])
 #endif
     return -1;
   }
+
+  srand(time(NULL));
 
   /**write output to stdout*/
   df = write_raw_data_file("-");
@@ -64,7 +70,7 @@ int main(int argc, char *argv[])
 
   for (i=0; i<BUF_SIZE; i++){
     phase += freq_rad;
-    buf[i] = (unsigned char)((sin(phase)+1)*128);
+    buf[i] = (unsigned char)((sin(phase)+1)*128+(rand()%64));
     //fprintf(stdout,"%d ", buf[i]);
   }
 
@@ -81,7 +87,7 @@ int main(int argc, char *argv[])
 
   destroy_raw_data_file(df);
 #ifdef DEBUG
-  fprintf(stderr, "%s:DONE\n", __func__);
+  fprintf(stderr, "%s: DONE\n", __FILE__);
 #endif
 
   return 0;

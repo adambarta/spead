@@ -18,6 +18,8 @@
     
 #include "spead_api.h"
 
+#define BUFZ 1300
+
 static volatile int run = 1;
 
 void handle_us(int signum) 
@@ -55,24 +57,70 @@ int usage(char **argv)
 
 int run_sender(struct spead_socket *x)
 {
-  int rb;
-  
-
+  int rb, rtn;
+  unsigned char buf[BUFZ];
 
   while(run){
     
+    rb = fread(buf, sizeof(unsigned char), BUFZ, stdin);
+    if (rb == 0){
+      run = 0;
+      break;
+    }
 
+    if ((rtn = send_data_spead_socket(x, buf, rb)) <= 0){
+      run = 0;
+      break;
+    }
 
   }
 
+#ifdef DEBUG
+  fprintf(stderr, "%s: rtn [%d] rb [%d]\n", __func__, rtn, rb);
+#endif
   
   return 0;
 }
 
 int run_receiver(struct spead_socket *x)
 {
+  struct spead_client *c;
+  int wb, rtn;
+  unsigned char buf[BUFZ];
+new_client:
+  c = accept_spead_socket(x);
+  if (c == NULL){
+#ifdef DEBUG
+    fprintf(stderr, "%s: unable to accept client\n", __func__);
+#endif
+    return -1;
+  }
+
+  while(run){
+
+    if ((rtn = recv_data_spead_client(c, buf, BUFZ)) <= 0){
+      if (rtn == 0){
+        destroy_spead_client(c);
+        c = NULL;
+        goto new_client;
+      }
+      run = 0;
+      break;
+    }
+    
+    wb = fwrite(buf, sizeof(unsigned char), rtn, stdout);
+    if (wb == 0){
+      run = 0;
+      break;
+    }
+ 
+  }
   
-  
+#ifdef DEBUG
+  fprintf(stderr, "%s: rtn [%d] wb [%d]\n", __func__, rtn, wb);
+#endif
+
+  destroy_spead_client(c);
   
   return 0;
 }
@@ -153,7 +201,7 @@ int main(int argc, char *argv[])
   if (register_signals_us() < 0)
     return EX_SOFTWARE;
 
-  x = create_udp_spead_socket(host, port);
+  x = create_tcp_socket(host, port);
   if (x == NULL){
     return EX_SOFTWARE;
   }
@@ -165,7 +213,7 @@ int main(int argc, char *argv[])
       fprintf(stderr, "%s: running sender\n", __func__);
 #endif
 
-#if 0
+#if 1
       if (connect_spead_socket(x) < 0){
         goto cleanup;
       }
@@ -186,8 +234,12 @@ int main(int argc, char *argv[])
       fprintf(stderr, "%s: running receiver\n", __func__);
 #endif
 
-#if 0
+#if 1
       if (bind_spead_socket(x) < 0){
+        goto cleanup;
+      }
+
+      if (listen_spead_socket(x) < 0){
         goto cleanup;
       }
 #endif
