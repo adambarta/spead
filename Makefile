@@ -1,4 +1,4 @@
-APPS = src gpu utils mcs
+APPS = src utils mcs gpu
 
 all: $(patsubst %,%-all,$(APPS))
 clean: $(patsubst %,%-clean,$(APPS))

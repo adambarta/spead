@@ -69,6 +69,26 @@ static inline mutex xchg(mutex *ptr, mutex x)
 }
 
 #endif
+#if 0
+/*mips cmpxchg*/
+__asm__ __volatile__(         \
+    " .set  push        \n" \
+    " .set  noat        \n" \
+    " .set  mips3       \n" \
+    "1: " ld "  %0, %2    # __cmpxchg_asm \n" \
+    " bne %0, %z3, 2f     \n" \
+    " .set  mips0       \n" \
+    " move  $1, %z4       \n" \
+    " .set  mips3       \n" \
+    " " st "  $1, %1        \n" \
+    " beqz  $1, 1b        \n" \
+    " .set  pop       \n" \
+    "2:           \n" \
+    : "=&r" (__ret), "=R" (*m)        \
+    : "R" (*m), "Jr" (old), "Jr" (new)      \
+    : "memory");  
+
+#endif
 
 void lock_mutex(mutex *m);
 void unlock_mutex(mutex *m);
