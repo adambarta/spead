@@ -106,7 +106,7 @@ struct spead_socket *create_udp_spead_socket(char *host, char *port)
   return x;
 }
 
-struct spead_socket *create_raw_ip_spead_socket(char *host)
+struct spead_socket *create_raw_ip_spead_socket(char *host, int proto)
 {
   struct spead_socket *x;
 
@@ -133,7 +133,8 @@ struct spead_socket *create_raw_ip_spead_socket(char *host)
   hints.ai_family     = AF_UNSPEC;
   hints.ai_socktype   = SOCK_RAW;
   hints.ai_flags      = AI_PASSIVE;
-  hints.ai_protocol   = 155;
+//  hints.ai_protocol   = 155;
+  hints.ai_protocol   = proto;
   hints.ai_canonname  = NULL;
   hints.ai_addr       = NULL;
   hints.ai_next       = NULL;

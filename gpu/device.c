@@ -4,7 +4,7 @@
 
 #define KERNELS_FILE  "/kernels.cl"
 #define KERNELDIR     "./"
-#define LEN 1024*1024
+#define LEN 50*1024*1024
 //#define LEN 1024
 
 int main(int argc, char *argv[])
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 
  // }
   
-
+    fwrite(o_out, len, sizeof(cl_int4), stdout);
 #if 0
 #ifdef DEBUG
   int i;
