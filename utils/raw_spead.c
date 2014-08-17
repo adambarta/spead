@@ -66,6 +66,7 @@ int usage(char **argv)
   fprintf(stderr, "usage:\n\t%s (options) destination"
                   "\n\n\tOptions"
                   "\n\t\t-h help"
+                  "\n\t\t-p proto number"
                   "\n\t\t-s sender"
                   "\n\t\t-r receiver\n\n", argv[0]);
   return EX_USAGE;
@@ -238,7 +239,7 @@ int run_raw_receiver(struct spead_socket *x)
 
 int main(int argc, char *argv[])
 {
-  int i=1,j=1,k=0, flag = 0;
+  int i=1,j=1,k=0, flag = 0, proto = 155;
   char c, *host = NULL;
 
   struct spead_socket *x=NULL;
@@ -279,12 +280,29 @@ int main(int argc, char *argv[])
           return usage(argv);
 
         /*settings*/
-       
+        case 'p':
+          j++;
+          if (argv[i][j] == '\0'){
+            j = 0;
+            i++;
+          }
+          if (i >= argc){
+            fprintf(stderr, "%s: option -%c requires a parameter\n", argv[0], c);
+            return EX_USAGE;
+          }
+          switch(c){
+            case 'p':
+              proto = atoi(argv[i] + j); 
+              break;
+          }
+          i++;
+          j = 1;
+          break;
+
         default:
           fprintf(stderr, "%s: unknown option -%c\n", argv[0], c);
           return EX_USAGE;
       }
-
     } else {
       /*parameters*/
       switch (k){
@@ -309,13 +327,15 @@ int main(int argc, char *argv[])
   if (register_signals_us() < 0)
     return EX_SOFTWARE;
 
-  x = create_raw_ip_spead_socket(host);
+  x = create_raw_ip_spead_socket(host, proto);
   if (x == NULL){
 #ifdef DEBUG
     fprintf(stderr, "%s\n", strerror(errno));
 #endif
     return EX_SOFTWARE;
   }
+
+  fprintf(stderr, "using proto number [%d]\n", proto);
 
   struct timeval tv;
   switch (flag){

@@ -288,7 +288,7 @@ char *itoa(int64_t i, char b[]);
 /*spead socket api*/
 void destroy_spead_socket(struct spead_socket *x);
 struct spead_socket *create_udp_spead_socket(char *host, char *port);
-struct spead_socket *create_raw_ip_spead_socket(char *host);
+struct spead_socket *create_raw_ip_spead_socket(char *host, int proto);
 struct spead_socket *create_tcp_socket(char *host, char *port);
 int bind_spead_socket(struct spead_socket *x);
 int connect_spead_socket(struct spead_socket *x);

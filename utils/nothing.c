@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
   
   host = argv[1];
 
-  x = create_raw_ip_spead_socket(host);
+  x = create_raw_ip_spead_socket(host, 155);
   if (x == NULL){
 #ifdef DEBUG
     fprintf(stderr, "%s\n", strerror(errno));
