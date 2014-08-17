@@ -4,7 +4,7 @@ CFLAGS += -Wall
 CFLAGS += -ggdb
 CFLAGS += -O3
 
-LIB= -lspead -lm
+LIB= -lspead -lm -s -static
 SLIB = ../src/libspead.a
 LDIR= -L../src
 IDIR= -I../src

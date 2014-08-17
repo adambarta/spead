@@ -177,7 +177,8 @@ int run_raw_sender(struct spead_socket *x)
 int run_raw_receiver(struct spead_socket *x)
 {
   int rb,i=0;
-  unsigned char buffer[BUFSIZE+20];
+  //unsigned char buffer[BUFSIZE+20];
+  unsigned char buffer[BUFSIZE];
 #if 1
   struct sockaddr_in peer_addr;
   socklen_t peer_addr_len;
@@ -192,7 +193,8 @@ int run_raw_receiver(struct spead_socket *x)
   if (df == NULL)
     return -1;
   
-  bzero(buffer, BUFSIZE+20);
+  //bzero(buffer, BUFSIZE+20);
+  bzero(buffer, BUFSIZE);
   
   while (run){
     
@@ -215,7 +217,8 @@ int run_raw_receiver(struct spead_socket *x)
     fprintf(stderr, "%s: [%d] received %d bytes from: %s:%d\n", __func__, i++, rb, inet_ntoa(peer_addr.sin_addr), ntohs(peer_addr.sin_port));
 #endif
 
-    if (write_next_chunk_raw_data_file(df, buffer+20, rb-20) < 0){
+    //if (write_next_chunk_raw_data_file(df, buffer+20, rb-20) < 0){
+    if (write_next_chunk_raw_data_file(df, buffer, rb) < 0){
 #ifdef DEBUG
       fprintf(stderr, "%s: cannot write to stream\n", __func__);
 #endif
