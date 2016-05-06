@@ -14,7 +14,7 @@
 
  
 #define SIZE 1130
-#define S "cellc_LTE_cape_town"
+#define S "naspernator"
 
 
 static unsigned char buf[SIZE] = {
