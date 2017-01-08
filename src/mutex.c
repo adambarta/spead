@@ -84,7 +84,7 @@ void unlock_mutex(mutex *m)
 #ifdef TEST_MUTEX
 int main(int argc, char *argv[])
 {
-#define CHILD 30
+#define CHILD 50
   int i, j;
   pid_t cpid;
   unsigned long *v;
@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
   *v   = 0;
   *key = 0;
 
-#if 0
+#if 1
   *v = cmpxchg(key, 0, 1);
   fprintf(stderr, "cmpxchgq return %ld key %ld\n", *v, *key);
   *v = cmpxchg(key, 1, 2);
@@ -120,6 +120,8 @@ int main(int argc, char *argv[])
 #endif
 
 #if 1
+  *v   = 0;
+  *key = 0;
   for (j=0; j<CHILD; j++){
 
     cpid = fork();
@@ -141,7 +143,7 @@ int main(int argc, char *argv[])
         temp++;
         *v = temp;
         unlock_mutex(key);
-        usleep(1);
+        //usleep(1);
       }
 
       exit(EX_OK);
