@@ -474,7 +474,6 @@ int worker_task_raw_packet_file_speadtx(void *data, struct spead_pipeline *l, in
       usleep(tx->t_delay);
     }
   
-  
   }
 
   fprintf(stderr, "%s: DONE\n", __func__); 

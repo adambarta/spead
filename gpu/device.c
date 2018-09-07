@@ -97,13 +97,15 @@ int main(int argc, char *argv[])
 
  // }
   
-    fwrite(o_out, len, sizeof(cl_int4), stdout);
 #if 0
+#if 1
 #ifdef DEBUG
-  int i;
   for (i=0; i<len; i++){
     fprintf(stderr, "%d %d %d %d\n", o_out[i].w, o_out[i].x, o_out[i].y, o_out[i].z);
   }
+#endif
+#else
+    fwrite(o_out, len, sizeof(cl_int4), stdout);
 #endif
 #endif
 
